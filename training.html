@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>训练记录 - 健身教练会员管理系统</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="专业的健身教练会员管理与训练记录系统">
+    <meta name="theme-color" content="#8B9DC3">
+    <link rel="manifest" href="/manifest.json">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    
+    <!-- 认证检查 -->
+    <script src="./js/auth.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="header-bar">
+        <div class="container-custom">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <button onclick="goBack()" class="back-btn" aria-label="返回">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <h1 class="text-lg font-semibold text-gray-700" id="pageTitle">训练记录</h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <div class="container-custom">
+            <!-- 训练记录列表 -->
+            <div id="trainingRecordsList" class="training-records-grid"></div>
+
+            <!-- 添加训练记录按钮 -->
+            <button id="addTrainingBtn" class="add-btn" aria-label="添加训练记录">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+            </button>
+        </div>
+    </main>
+
+    <!-- 模板容器 -->
+    <div id="modalContainer"></div>
+
+    <!-- 底部导航栏 -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-container">
+            <a href="index.html" class="nav-item">
+                <div class="nav-item-icon">👥</div>
+                <div class="nav-item-text">会员管理</div>
+            </a>
+            <a href="training-list.html" class="nav-item">
+                <div class="nav-item-icon">🏋️</div>
+                <div class="nav-item-text">训练记录</div>
+            </a>
+            <a href="finance.html" class="nav-item">
+                <div class="nav-item-icon">💰</div>
+                <div class="nav-item-text">财务统计</div>
+            </a>
+            <a href="data-management.html" class="nav-item">
+                <div class="nav-item-icon">📊</div>
+                <div class="nav-item-text">数据管理</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 加载脚本 -->
+    <script src="./js/pwa-register.js"></script>
+    <script src="./js/data.js"></script>
+    <script src="./js/training-data.js"></script>
+    <script src="./js/training-page.js"></script>
+    <script src="./js/templates.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>训练记录 - 健身教练会员管理系统</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="专业的健身教练会员管理与训练记录系统">
+    <meta name="theme-color" content="#8B9DC3">
+    <link rel="manifest" href="/manifest.json">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    
+    <!-- 认证检查 -->
+    <script src="./js/auth.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="header-bar">
+        <div class="container-custom">
+            <h1 class="text-lg font-semibold text-gray-700">场地费结算</h1>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <div class="container-custom">
+            <!-- 筛选和操作栏 -->
+            <div class="venue-settlement-toolbar">
+                <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                    <select id="venueMethodFilter" class="form-select" onchange="filterByVenueMethod()">
+                        <option value="">全部会员</option>
+                        <option value="一次性">一次性结算</option>
+                        <option value="10次一结">10次一结</option>
+                    </select>
+                </div>
+                <button id="settlementBtn" class="btn btn-primary" onclick="openSettlementModal()" style="display: flex; align-items: center; gap: 6px;">
+                    <span>💰</span>
+                    <span>批量结算</span>
+                </button>
+            </div>
+
+            <!-- 会员列表（带训练记录） -->
+            <div id="trainingMembersList" class="members-grid"></div>
+        </div>
+    </main>
+
+    <!-- 底部导航栏 -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-container">
+            <a href="index.html" class="nav-item">
+                <div class="nav-item-icon">👥</div>
+                <div class="nav-item-text">会员管理</div>
+            </a>
+            <a href="training-list.html" class="nav-item active">
+                <div class="nav-item-icon">🏋️</div>
+                <div class="nav-item-text">训练记录</div>
+            </a>
+            <a href="finance.html" class="nav-item">
+                <div class="nav-item-icon">💰</div>
+                <div class="nav-item-text">财务统计</div>
+            </a>
+            <a href="data-management.html" class="nav-item">
+                <div class="nav-item-icon">📊</div>
+                <div class="nav-item-text">数据管理</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 加载脚本 -->
+    <script src="./js/pwa-register.js"></script>
+    <script src="./js/data.js"></script>
+    <script src="./js/training-data.js"></script>
+    <script src="./js/training-list.js"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>财务统计 - 健身教练会员管理系统</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="专业的健身教练会员管理与训练记录系统">
+    <meta name="theme-color" content="#8B9DC3">
+    <link rel="manifest" href="/manifest.json">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    
+    <!-- 认证检查 -->
+    <script src="./js/auth.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="header-bar">
+        <div class="container-custom">
+            <h1 class="text-lg font-semibold text-gray-700">财务统计</h1>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <div class="container-custom">
+            <!-- 财务概览卡片 -->
+            <div class="finance-summary-cards">
+                <!-- 总收入卡片 -->
+                <div class="finance-card">
+                    <div class="finance-card-icon" style="background: linear-gradient(135deg, #4CAF50, #81C784);">💰</div>
+                    <div class="finance-card-content">
+                        <div class="finance-card-label">总收入</div>
+                        <div class="finance-card-value" id="totalIncome">¥0</div>
+                    </div>
+                </div>
+
+                <!-- 本月收入卡片 -->
+                <div class="finance-card">
+                    <div class="finance-card-icon" style="background: linear-gradient(135deg, #2196F3, #64B5F6);">📈</div>
+                    <div class="finance-card-content">
+                        <div class="finance-card-label">本月收入</div>
+                        <div class="finance-card-value" id="monthIncome">¥0</div>
+                    </div>
+                </div>
+
+                <!-- 活跃会员 -->
+                <div class="finance-card">
+                    <div class="finance-card-icon" style="background: linear-gradient(135deg, #FF9800, #FFB74D);">👥</div>
+                    <div class="finance-card-content">
+                        <div class="finance-card-label">活跃会员</div>
+                        <div class="finance-card-value" id="activeMembers">0人</div>
+                    </div>
+                </div>
+
+                <!-- 总课时 -->
+                <div class="finance-card">
+                    <div class="finance-card-icon" style="background: linear-gradient(135deg, #9C27B0, #BA68C8);">📚</div>
+                    <div class="finance-card-content">
+                        <div class="finance-card-label">剩余课时</div>
+                        <div class="finance-card-value" id="totalCourses">0节</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 收入明细 -->
+            <div class="section-card">
+                <h2 class="section-title">收入明细</h2>
+                <div id="incomeList" class="income-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部导航栏 -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-container">
+            <a href="index.html" class="nav-item">
+                <div class="nav-item-icon">👥</div>
+                <div class="nav-item-text">会员管理</div>
+            </a>
+            <a href="training-list.html" class="nav-item">
+                <div class="nav-item-icon">🏋️</div>
+                <div class="nav-item-text">训练记录</div>
+            </a>
+            <a href="finance.html" class="nav-item active">
+                <div class="nav-item-icon">💰</div>
+                <div class="nav-item-text">财务统计</div>
+            </a>
+            <a href="data-management.html" class="nav-item">
+                <div class="nav-item-icon">📊</div>
+                <div class="nav-item-text">数据管理</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 加载脚本 -->
+    <script src="./js/pwa-register.js"></script>
+    <script src="./js/data.js"></script>
+    <script src="./js/finance.js"></script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清理 PWA 缓存</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #8B9DC3, #A8B8D8);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .info {
+            background: #F8F6F3;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #8B9DC3, #A8B8D8);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 157, 195, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .log {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 13px;
+            font-family: monospace;
+            display: none;
+        }
+
+        .log.show {
+            display: block;
+        }
+
+        .log-item {
+            padding: 4px 0;
+            color: #333;
+        }
+
+        .log-item.success {
+            color: #4CAF50;
+        }
+
+        .log-item.error {
+            color: #f44336;
+        }
+
+        .btn-secondary {
+            background: #E8DCC4;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 6px 20px rgba(232, 220, 196, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 PWA 缓存清理工具</h1>
+        
+        <div class="info">
+            <strong>说明：</strong>
+            <br>如果 PWA 安装按钮无响应或无法关闭，请点击下方按钮清理缓存，然后刷新页面。
+        </div>
+
+        <button class="btn" onclick="clearAllCache()">清理所有缓存</button>
+        <button class="btn" onclick="unregisterServiceWorker()">注销 Service Worker</button>
+        <button class="btn" onclick="clearAllAndReload()">清理并刷新</button>
+        <button class="btn btn-secondary" onclick="resetInstallPrompt()">重置安装提示</button>
+
+        <div class="log" id="log"></div>
+    </div>
+
+    <script>
+        const log = document.getElementById('log');
+
+        function addLog(message, type = 'info') {
+            log.classList.add('show');
+            const item = document.createElement('div');
+            item.className = `log-item ${type}`;
+            item.textContent = `${new Date().toLocaleTimeString()} - ${message}`;
+            log.appendChild(item);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        async function clearAllCache() {
+            try {
+                addLog('开始清理缓存...', 'info');
+                
+                // 清理所有缓存
+                const cacheNames = await caches.keys();
+                addLog(`找到 ${cacheNames.length} 个缓存`, 'info');
+                
+                for (const cacheName of cacheNames) {
+                    await caches.delete(cacheName);
+                    addLog(`✓ 删除缓存: ${cacheName}`, 'success');
+                }
+                
+                addLog('✅ 所有缓存已清理', 'success');
+            } catch (error) {
+                addLog(`❌ 清理失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function unregisterServiceWorker() {
+            try {
+                addLog('开始注销 Service Worker...', 'info');
+                
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    addLog(`找到 ${registrations.length} 个 Service Worker`, 'info');
+                    
+                    for (const registration of registrations) {
+                        await registration.unregister();
+                        addLog(`✓ 注销成功: ${registration.scope}`, 'success');
+                    }
+                    
+                    addLog('✅ 所有 Service Worker 已注销', 'success');
+                } else {
+                    addLog('浏览器不支持 Service Worker', 'error');
+                }
+            } catch (error) {
+                addLog(`❌ 注销失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function clearAllAndReload() {
+            try {
+                addLog('开始完整清理...', 'info');
+                
+                // 清理缓存
+                await clearAllCache();
+                
+                // 注销 Service Worker
+                await unregisterServiceWorker();
+                
+                // 清理 localStorage 中的 PWA 相关数据
+                localStorage.removeItem('pwa-install-prompted');
+                localStorage.removeItem('pwa-installed');
+                addLog('✓ 清理 localStorage', 'success');
+                
+                addLog('✅ 清理完成，3秒后刷新页面...', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = '/index.html';
+                }, 3000);
+            } catch (error) {
+                addLog(`❌ 清理失败: ${error.message}`, 'error');
+            }
+        }
+
+        function resetInstallPrompt() {
+            localStorage.removeItem('pwa-install-prompted');
+            localStorage.removeItem('pwa-installed');
+            addLog('✅ 安装提示已重置', 'success');
+            addLog('请返回主页重新触发安装提示', 'info');
+        }
+
+        // 页面加载时显示当前状态
+        window.addEventListener('load', async () => {
+            addLog('=== 当前状态 ===', 'info');
+            
+            // 检查 Service Worker
+            if ('serviceWorker' in navigator) {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                addLog(`Service Worker 数量: ${registrations.length}`, 'info');
+                registrations.forEach(reg => {
+                    addLog(`- ${reg.scope}`, 'info');
+                });
+            }
+            
+            // 检查缓存
+            const cacheNames = await caches.keys();
+            addLog(`缓存数量: ${cacheNames.length}`, 'info');
+            cacheNames.forEach(name => {
+                addLog(`- ${name}`, 'info');
+            });
+            
+            // 检查 localStorage
+            const hasPrompted = localStorage.getItem('pwa-install-prompted');
+            const hasInstalled = localStorage.getItem('pwa-installed');
+            addLog(`安装提示已显示: ${hasPrompted ? '是' : '否'}`, 'info');
+            addLog(`PWA 已安装: ${hasInstalled ? '是' : '否'}`, 'info');
+            
+            addLog('=== 状态检查完成 ===', 'info');
+        });
+    </script>
+</body>
+</html>

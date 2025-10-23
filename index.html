@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>健身教练会员管理系统</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="专业的健身教练会员管理与训练记录系统">
+    <meta name="theme-color" content="#8B9DC3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="会员管理">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- iOS Icons -->
+    <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="/icons/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512x512.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    
+    <!-- 认证检查 -->
+    <script src="./js/auth.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="header-bar">
+        <div class="container-custom">
+            <h1 class="text-lg font-semibold text-gray-700">会员管理</h1>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <div class="container-custom">
+            <!-- 会员列表 -->
+            <div id="membersList" class="members-grid"></div>
+
+            <!-- 添加会员按钮 -->
+            <button id="addMemberBtn" class="add-btn" aria-label="添加会员">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+            </button>
+        </div>
+    </main>
+
+    <!-- 模板容器 -->
+    <div id="modalContainer"></div>
+
+    <!-- 底部导航栏 -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-container">
+            <a href="index.html" class="nav-item active">
+                <div class="nav-item-icon">👥</div>
+                <div class="nav-item-text">会员管理</div>
+            </a>
+            <a href="training-list.html" class="nav-item">
+                <div class="nav-item-icon">🏋️</div>
+                <div class="nav-item-text">训练记录</div>
+            </a>
+            <a href="finance.html" class="nav-item">
+                <div class="nav-item-icon">💰</div>
+                <div class="nav-item-text">财务统计</div>
+            </a>
+            <a href="data-management.html" class="nav-item">
+                <div class="nav-item-icon">📊</div>
+                <div class="nav-item-text">数据管理</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 加载模板和脚本 -->
+    <script src="./js/pwa-register.js"></script>
+    <script src="./js/data.js"></script>
+    <script src="./js/templates.js"></script>
+    <script src="./js/members.js"></script>
+    <script src="./js/training.js"></script>
+</body>
+</html>

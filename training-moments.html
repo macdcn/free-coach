@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>训练精彩瞬间 - 健身教练会员管理系统</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="记录会员训练精彩瞬间">
+    <meta name="theme-color" content="#8B9DC3">
+    <link rel="manifest" href="/manifest.json">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    
+    <!-- 认证检查 -->
+    <script src="./js/auth.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="header-bar">
+        <div class="container-custom flex items-center">
+            <button onclick="location.href='data-management.html'" class="back-btn mr-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            <h1 class="text-lg font-semibold text-white">训练精彩瞬间</h1>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <div class="container-custom">
+            <!-- 提示信息 -->
+            <div class="section-card mb-4" style="background: linear-gradient(135deg, #A8B8D8, #8B9DC3); color: white;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="font-size: 32px;">📸</div>
+                    <div>
+                        <div style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">记录精彩瞬间</div>
+                        <div style="font-size: 13px; opacity: 0.95;">为会员创建专属训练记录，生成精美分享页面</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 训练信息表单 -->
+            <div class="section-card">
+                <h2 class="section-title">基础信息</h2>
+                <form id="trainingMomentForm">
+                    <!-- 选择会员 -->
+                    <div class="form-group">
+                        <label class="form-label">选择会员 *</label>
+                        <select id="memberId" class="form-input" required onchange="updateMemberInfo()">
+                            <option value="">请选择会员</option>
+                        </select>
+                    </div>
+
+                    <!-- 会员信息显示 -->
+                    <div id="memberInfoDisplay" style="display: none;" class="form-group">
+                        <div class="member-info-display">
+                            <img id="displayAvatar" class="form-member-avatar" src="" alt="会员头像">
+                            <div class="form-member-details">
+                                <div class="form-member-name" id="displayName"></div>
+                                <div class="form-member-phone" id="displayPhone"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 训练日期 -->
+                    <div class="form-group">
+                        <label class="form-label">训练日期 *</label>
+                        <input type="date" id="trainingDate" class="form-input" required>
+                    </div>
+
+                    <!-- 训练部位 -->
+                    <div class="form-group">
+                        <label class="form-label">训练部位 *</label>
+                        <select id="bodyPart" class="form-input" required onchange="updateMainBodyPartActions()">
+                            <option value="">请选择训练部位</option>
+                            <option value="胸部">胸部</option>
+                            <option value="背部">背部</option>
+                            <option value="肩部">肩部</option>
+                            <option value="臀腿">臀腿</option>
+                            <option value="手臂">手臂</option>
+                        </select>
+                    </div>
+
+                    <!-- 训练时长 -->
+                    <div class="form-group">
+                        <label class="form-label">训练时长（分钟）*</label>
+                        <input type="number" id="duration" class="form-input" placeholder="请输入训练时长" value="60" required>
+                    </div>
+
+                    <!-- 预估热量消耗 -->
+                    <div class="form-group">
+                        <label class="form-label">预估热量消耗（千卡）*</label>
+                        <input type="number" id="calories" class="form-input" placeholder="请输入热量消耗" value="300" required>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 训练动作与照片 -->
+            <div class="section-card">
+                <h2 class="section-title">训练动作</h2>
+                <p class="section-description">为每个动作添加照片和说明</p>
+                
+                <div id="actionsContainer">
+                    <!-- 动作项将动态添加 -->
+                </div>
+
+                <button type="button" onclick="addActionItem()" class="btn btn-secondary" style="width: 100%; margin-top: 16px;">
+                    <span>➕</span>
+                    <span>添加动作</span>
+                </button>
+            </div>
+
+            <!-- 教练点评 -->
+            <div class="section-card">
+                <h2 class="section-title">教练点评</h2>
+                <div class="form-group">
+                    <textarea id="coachComment" class="form-textarea" placeholder="请输入对本次训练的点评..." rows="5"></textarea>
+                </div>
+            </div>
+
+            <!-- 提交按钮 -->
+            <div class="section-card" style="background: transparent; box-shadow: none; padding: 0;">
+                <div style="display: flex; gap: 12px; justify-content: center;">
+                    <button type="button" onclick="previewMoment()" class="btn btn-secondary" style="flex: 1; max-width: 200px;">
+                        <span>👁️</span>
+                        <span>预览</span>
+                    </button>
+                    <button type="button" onclick="generateMoment()" class="btn btn-primary" style="flex: 1; max-width: 200px;">
+                        <span>✨</span>
+                        <span>生成分享</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部导航栏 -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-container">
+            <a href="index.html" class="nav-item">
+                <div class="nav-item-icon">👥</div>
+                <div class="nav-item-text">会员管理</div>
+            </a>
+            <a href="training-list.html" class="nav-item">
+                <div class="nav-item-icon">🏋️</div>
+                <div class="nav-item-text">训练记录</div>
+            </a>
+            <a href="finance.html" class="nav-item">
+                <div class="nav-item-icon">💰</div>
+                <div class="nav-item-text">财务统计</div>
+            </a>
+            <a href="data-management.html" class="nav-item active">
+                <div class="nav-item-icon">📊</div>
+                <div class="nav-item-text">数据管理</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 模态框容器 -->
+    <div id="modalContainer"></div>
+
+    <!-- 加载脚本 -->
+    <script src="./js/pwa-register.js"></script>
+    <script src="./js/data.js"></script>
+    <script src="./js/training-data.js"></script>
+    <script src="./js/training-moments.js"></script>
+</body>
+</html>

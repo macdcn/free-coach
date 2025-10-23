@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>训练记录报告</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="专业的健身教练会员管理与训练记录系统">
+    <meta name="theme-color" content="#8B9DC3">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- 认证检查 -->
+    <script src="./js/auth.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #F8F6F3, #FFFFFF);
+            color: #333;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .report-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(139, 157, 195, 0.15);
+            padding: 30px;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #8B9DC3;
+        }
+
+        .report-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #8B9DC3;
+            margin-bottom: 10px;
+        }
+
+        .report-subtitle {
+            font-size: 14px;
+            color: #999;
+        }
+
+        .member-info {
+            background: linear-gradient(135deg, #F8F6F3, #FFFFFF);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #8B9DC3;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed #E8DCC4;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .info-value {
+            font-weight: 700;
+            color: #333;
+            font-size: 15px;
+        }
+
+        .info-value.highlight {
+            color: #8B9DC3;
+            font-size: 18px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #8B9DC3;
+            margin: 25px 0 15px;
+            padding-left: 12px;
+            border-left: 4px solid #8B9DC3;
+        }
+
+        .training-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .training-table thead {
+            background: linear-gradient(135deg, #8B9DC3, #A8B8D8);
+            color: white;
+        }
+
+        .training-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .training-table tbody tr {
+            border-bottom: 1px solid #E8DCC4;
+            transition: background 0.2s;
+        }
+
+        .training-table tbody tr:hover {
+            background: #F8F6F3;
+        }
+
+        .training-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .training-table td {
+            padding: 12px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-training {
+            background: linear-gradient(135deg, #A8C5A8, #B8D5B8);
+            color: white;
+        }
+
+        .status-leave {
+            background: linear-gradient(135deg, #D4A574, #E4B584);
+            color: white;
+        }
+
+        .message-box {
+            background: linear-gradient(135deg, #8B9DC3, #A8B8D8);
+            color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(139, 157, 195, 0.3);
+        }
+
+        .message-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .message-content {
+            font-size: 15px;
+            line-height: 1.8;
+            font-style: italic;
+        }
+
+        .report-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #E8DCC4;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #8B9DC3, #A8B8D8);
+            color: white;
+            box-shadow: 0 2px 8px rgba(139, 157, 195, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 157, 195, 0.4);
+        }
+
+        .btn-secondary {
+            background: #E8DCC4;
+            color: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #D4C8B0;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .report-container {
+                box-shadow: none;
+                padding: 20px;
+            }
+
+            .action-buttons {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .report-container {
+                padding: 20px;
+            }
+
+            .report-title {
+                font-size: 22px;
+            }
+
+            .training-table {
+                font-size: 12px;
+            }
+
+            .training-table th,
+            .training-table td {
+                padding: 8px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <div class="report-header">
+            <h1 class="report-title">💪 训练记录总结报告</h1>
+            <p class="report-subtitle">Training Record Summary Report</p>
+        </div>
+
+        <!-- 会员基本信息 -->
+        <div class="member-info" id="memberInfo">
+            <!-- 由JavaScript动态生成 -->
+        </div>
+
+        <!-- 训练记录表格 -->
+        <h2 class="section-title">📋 训练记录明细</h2>
+        <table class="training-table">
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>星期</th>
+                    <th>训练部位</th>
+                    <th>状态</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody id="trainingTableBody">
+                <!-- 由JavaScript动态生成 -->
+            </tbody>
+        </table>
+
+        <!-- 未来寄语 -->
+        <div class="message-box" id="messageBox">
+            <!-- 由JavaScript动态生成 -->
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="window.print()">🖨️ 打印报告</button>
+            <button class="btn btn-secondary" onclick="window.close()">✖️ 关闭</button>
+        </div>
+
+        <div class="report-footer">
+            <p>本报告由健身教练会员管理系统自动生成</p>
+            <p>生成时间：<span id="generateTime"></span></p>
+        </div>
+    </div>
+
+    <script src="./js/pwa-register.js"></script>
+    <script src="./js/data.js"></script>
+    <script src="./js/training-report.js"></script>
+</body>
+</html>

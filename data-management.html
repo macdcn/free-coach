@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>数据管理 - 健身教练会员管理系统</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="专业的健身教练会员管理与训练记录系统">
+    <meta name="theme-color" content="#8B9DC3">
+    <link rel="manifest" href="/manifest.json">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    
+    <!-- 认证检查 -->
+    <script src="./js/auth.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="header-bar">
+        <div class="container-custom">
+            <h1 class="text-lg font-semibold text-gray-700">数据管理</h1>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <div class="container-custom">
+            <!-- 数据安全提示 -->
+            <div class="section-card" style="background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%); border-left: 4px solid #FFB74D;">
+                <div style="display: flex; align-items: start; gap: 12px;">
+                    <div style="font-size: 24px; line-height: 1;">⚠️</div>
+                    <div style="flex: 1;">
+                        <h3 style="font-size: 16px; font-weight: 600; color: #E65100; margin-bottom: 8px;">数据安全提示</h3>
+                        <p style="font-size: 14px; color: #EF6C00; line-height: 1.6; margin-bottom: 8px;">
+                            您的数据存储在浏览器本地（localStorage），<strong>请定期备份</strong>！
+                        </p>
+                        <div style="font-size: 13px; color: #F57C00; line-height: 1.8;">
+                            <div>• 清除浏览器缓存时选择“清除Cookie和网站数据”会导致数据丢失</div>
+                            <div>• 更换设备或浏览器无法同步数据</div>
+                            <div>• <strong>建议：每周导出一次备份文件</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据统计 -->
+            <div class="section-card">
+                <h2 class="section-title">数据概览</h2>
+                <div class="data-stats-grid">
+                    <div class="data-stat-item">
+                        <div class="data-stat-label">会员总数</div>
+                        <div class="data-stat-value" id="totalMembers">0</div>
+                    </div>
+                    <div class="data-stat-item">
+                        <div class="data-stat-label">训练记录</div>
+                        <div class="data-stat-value" id="totalTrainings">0</div>
+                    </div>
+                    <div class="data-stat-item">
+                        <div class="data-stat-label">数据大小</div>
+                        <div class="data-stat-value" id="dataSize">0 KB</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 模拟数据 -->
+            <div class="section-card" style="border-left: 4px solid #42A5F5;">
+                <h2 class="section-title">模拟数据</h2>
+                <p class="section-description">生成测试数据以便快速体验系统功能</p>
+                <div class="action-buttons">
+                    <button onclick="generateMockData()" class="btn btn-primary">
+                        <span>📦</span>
+                        <span>生成模拟数据</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 数据清理 -->
+            <div class="section-card" style="border-left: 4px solid #EF5350;">
+                <h2 class="section-title">数据清理</h2>
+                <p class="section-description">清除所有数据，包括会员信息和训练记录（❗不可恢复）</p>
+                <div class="action-buttons">
+                    <button onclick="clearAllData()" class="btn btn-delete">
+                        <span>🗑️</span>
+                        <span>清空所有数据</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 数据备份（重要！） -->
+            <div class="section-card" style="border-left: 4px solid #66BB6A;">
+                <h2 class="section-title">💾 数据备份（强烈建议）</h2>
+                <p class="section-description">定期导出数据到本地文件，防止数据意外丢失</p>
+                <div class="action-buttons">
+                    <button onclick="exportData()" class="btn btn-secondary">
+                        <span>💾</span>
+                        <span>导出数据</span>
+                    </button>
+                    <button onclick="importData()" class="btn btn-secondary">
+                        <span>📥</span>
+                        <span>导入数据</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 训练精彩瞬间 -->
+            <div class="section-card" style="border-left: 4px solid #AB47BC;">
+                <h2 class="section-title">训练精彩瞬间</h2>
+                <p class="section-description">记录会员训练精彩时刻，生成精美分享页面</p>
+                <div class="action-buttons">
+                    <button onclick="location.href='training-moments.html'" class="btn btn-primary">
+                        <span>📸</span>
+                        <span>创建训练瞬间</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 安全设置 -->
+            <div class="section-card">
+                <h2 class="section-title">安全设置</h2>
+                <p class="section-description">修改登录密码以保护您的数据安全</p>
+                <div class="action-buttons">
+                    <button onclick="changePassword()" class="btn btn-primary">
+                        <span>🔐</span>
+                        <span>修改密码</span>
+                    </button>
+                    <button onclick="logout()" class="btn btn-delete">
+                        <span>🚪</span>
+                        <span>退出登录</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部导航栏 -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-container">
+            <a href="index.html" class="nav-item">
+                <div class="nav-item-icon">👥</div>
+                <div class="nav-item-text">会员管理</div>
+            </a>
+            <a href="training-list.html" class="nav-item">
+                <div class="nav-item-icon">🏋️</div>
+                <div class="nav-item-text">训练记录</div>
+            </a>
+            <a href="finance.html" class="nav-item">
+                <div class="nav-item-icon">💰</div>
+                <div class="nav-item-text">财务统计</div>
+            </a>
+            <a href="data-management.html" class="nav-item active">
+                <div class="nav-item-icon">📊</div>
+                <div class="nav-item-text">数据管理</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 隐藏的文件上传输入框 -->
+    <input type="file" id="importFileInput" accept=".json" style="display: none">
+
+    <!-- 模态框容器 -->
+    <div id="modalContainer"></div>
+
+    <!-- 加载脚本 -->
+    <script src="./js/pwa-register.js"></script>
+    <script src="./js/data.js"></script>
+    <script src="./js/training-data.js"></script>
+    <script src="./js/data-management.js"></script>
+</body>
+</html>
