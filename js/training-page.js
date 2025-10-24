@@ -490,15 +490,21 @@ function deleteTrainingRecord(recordId) {
 
 // 确认删除训练记录
 function confirmDeleteTrainingRecord(recordId) {
+    // 获取要删除的记录
+    const record = trainingRecords.find(r => r.id === recordId);
+    const isLeave = record && (record.recordType === 'leave' || record.bodyPart === '请假有事');
+    
     DataManager.deleteTrainingRecord(recordId);
     
-    // 恢复会员课时（因为删除训练记录）
-    const member = DataManager.getMemberById(currentMemberId);
-    if (member) {
-        DataManager.updateMember(currentMemberId, {
-            remainingCourses: member.remainingCourses + 1
-        });
-        currentMember = DataManager.getMemberById(currentMemberId);
+    // 仅当删除的是正常训练记录时才恢复会员课时（请假记录不扣课时，所以也不恢复）
+    if (!isLeave) {
+        const member = DataManager.getMemberById(currentMemberId);
+        if (member) {
+            DataManager.updateMember(currentMemberId, {
+                remainingCourses: member.remainingCourses + 1
+            });
+            currentMember = DataManager.getMemberById(currentMemberId);
+        }
     }
     
     showToast('训练记录已删除');
